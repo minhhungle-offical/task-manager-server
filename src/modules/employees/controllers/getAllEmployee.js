@@ -10,8 +10,6 @@ export async function getAllEmployee(req, res, next) {
     if (phone) usersRef = usersRef.where('phone', '==', phone)
     if (role) usersRef = usersRef.where('role', '==', role)
 
-    usersRef = usersRef.orderBy('createdAt', 'desc')
-
     const snapshot = await usersRef.get()
     const userList = snapshot.docs.map((doc) => ({
       id: doc.id,
@@ -19,7 +17,7 @@ export async function getAllEmployee(req, res, next) {
     }))
 
     const currentPage = parseInt(page) || 1
-    const perPage = parseInt(limit) || 10
+    const perPage = parseInt(limit) || 5
     const start = (currentPage - 1) * perPage
     const total = userList.length
 
@@ -40,7 +38,7 @@ export async function getAllEmployee(req, res, next) {
       },
     })
   } catch (err) {
-    console.err('get-all-employee error:', err)
+    console.error('get-all-employee error:', err)
     return res.status(500).json({ message: 'Internal server error' })
   }
 }
