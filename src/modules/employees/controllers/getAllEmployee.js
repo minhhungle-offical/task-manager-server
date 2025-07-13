@@ -11,10 +11,12 @@ export async function getAllEmployee(req, res, next) {
     if (role) usersRef = usersRef.where('role', '==', role)
 
     const snapshot = await usersRef.get()
-    const userList = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }))
+    const userList = snapshot.docs
+      .map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }))
+      .sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis())
 
     const currentPage = parseInt(page) || 1
     const perPage = parseInt(limit) || 5
