@@ -1,8 +1,9 @@
+import { v4 as uuid } from 'uuid'
 import { AccessCode } from '../../../config/db.collections.js'
 import { db } from '../../../config/db.js'
 import { generateOtp } from '../../../utils/generateCode.js'
 import { getOtpExpiry } from '../../../utils/optExpiry.js'
-import { v4 as uuid } from 'uuid'
+import { sendSMS } from '../../../utils/sendSMS.js'
 
 const seconds = 30
 
@@ -35,7 +36,7 @@ export async function sendOtpByPhone(phone, role) {
     type: 'sms',
   })
 
-  // TODO: sendSMS(phone, `Your OTP code is ${otp}`)
+  // sendSMS({ to: phone, text: `Your OTP code is ${otp}` })
 
   return { otp, id }
 }

@@ -1,22 +1,22 @@
-import { Vonage } from '@vonage/server-sdk'
 import { config } from 'dotenv'
+import twilio from 'twilio'
 
 config()
 
-const vonage = new Vonage({
-  apiKey: process.env.VONAGE_API_KEY,
-  apiSecret: process.env.VONAGE_API_SECRET,
-})
+const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
 
 export async function sendSMS({ to, text }) {
-  await Vonage.sms
-    .send({ to, from: 'Vonage APIs', text })
-    .then((resp) => {
-      console.log('Message sent successfully')
-      console.log(resp)
+  if (!to || !text) throw new Error('Missing "to" or "text" parameter')
+
+  try {
+    const message = await client.messages.create({
+      body: text,
+      messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
+      to,
     })
-    .catch((err) => {
-      console.log('There was an error sending the messages.')
-      console.error(err)
-    })
+    // console.log('message: ', message)
+    return message
+  } catch (err) {
+    throw err
+  }
 }
