@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }))
 // ROUTES
 app.use('/api/auth', authRouter)
 app.use('/api/employees', employeeRouter)
-app.use('./api/tasks', taskRouter)
+app.use('/api/tasks', taskRouter)
 
 app.use((req, res, next) => {
   res.status(404).json({ error: 'Not Found' })

@@ -1,4 +1,5 @@
 import { createEmployee } from './createEmployee.js'
+import { getActiveEmployee } from './getActiveEmployee.js'
 import { getAllEmployee } from './getAllEmployee.js'
 import { getEmployeeById } from './getEmployeeById.js'
 import { removeEmployee } from './removeEmployee.js'
@@ -10,4 +11,5 @@ export const employeeController = {
   createEmployee,
   updateEmployee,
   removeEmployee,
+  getActiveEmployee,
 }

@@ -1,14 +1,15 @@
 import { User } from '../../../config/db.collections.js'
 
-export async function getAllEmployee(req, res, next) {
+export async function getAllEmployee(req, res) {
   try {
-    const { page, limit, name, email, phone, role } = req.query
+    const { page, limit, name, email, phone, role, isActive } = req.query
     let usersRef = User
 
     if (name) usersRef = usersRef.where('name', '==', name)
     if (email) usersRef = usersRef.where('email', '==', email)
     if (phone) usersRef = usersRef.where('phone', '==', phone)
     if (role) usersRef = usersRef.where('role', '==', role)
+    if (isActive) usersRef = usersRef.where('role', '==', isActive)
 
     const snapshot = await usersRef.get()
     const userList = snapshot.docs

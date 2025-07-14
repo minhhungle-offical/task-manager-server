@@ -26,6 +26,7 @@ export async function updateMe(req, res, next) {
     if (avatarPublicId !== undefined) updates.avatarPublicId = avatarPublicId
 
     updates.updatedAt = Timestamp.now()
+    updates.isActive = true
 
     if (Object.keys(updates).length === 0) {
       return res.status(400).json({ message: 'No fields to update' })
