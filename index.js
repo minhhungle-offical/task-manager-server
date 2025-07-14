@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 import http from 'http'
 import { Server } from 'socket.io'
 import app from './src/app.js'
-import { socketJoinRoom } from './src/socket/socket.js'
+import { joinRoom } from './src/socket/joinRoom.js'
 
 dotenv.config()
 
@@ -20,7 +20,7 @@ io.on('connection', (socket) => {
   console.log('Socket IO connected:', socket.id)
 })
 
-socketJoinRoom(io)
+joinRoom(io)
 
 const PORT = process.env.PORT || 3000
 server.listen(PORT, () => {
