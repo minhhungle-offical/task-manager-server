@@ -8,9 +8,9 @@ import { sendSMS } from '../../../utils/sendSMS.js'
 const seconds = 30
 
 // =================== PHONE ===================
-export async function hasRecentPhoneOtp(phone, role) {
+export async function hasRecentPhoneOtp(phone) {
   const snapshot = await AccessCode.where('phone', '==', phone)
-    .where('role', '==', role)
+    .where('role', '==', 'manager')
     .where('type', '==', 'sms')
     .where('isUsed', '==', false)
     .get()
@@ -43,11 +43,11 @@ export async function sendOtpByPhone(phone, role) {
 
 // =================== EMAIL ===================
 
-export async function hasRecentEmailOtp(email, role) {
+export async function hasRecentEmailOtp(email) {
   const snapshot = await db
     .collection('accessCodes')
     .where('email', '==', email)
-    .where('role', '==', role)
+    .where('role', '==', 'employee')
     .where('type', '==', 'email')
     .where('isUsed', '==', false)
     .get()

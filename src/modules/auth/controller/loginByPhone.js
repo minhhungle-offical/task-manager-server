@@ -6,13 +6,23 @@ config()
 export async function loginByPhone(req, res, next) {
   try {
     const { phone } = req.body
-    const role = 'manager'
 
     if (!phone) {
       return res.status(400).json({ message: 'Phone number is required' })
     }
 
-    const recentlySent = await hasRecentPhoneOtp(phone, role)
+    const userSnap = await db
+      .collection('users')
+      .where('phone', '==', phone)
+      .where('role', '==', 'manager')
+      .limit(1)
+      .get()
+
+    if (userSnap.empty) {
+      return res.status(404).json({ message: 'Manager not found' })
+    }
+
+    const recentlySent = await hasRecentPhoneOtp(phone)
 
     if (recentlySent) {
       return res.status(429).json({
@@ -20,7 +30,7 @@ export async function loginByPhone(req, res, next) {
       })
     }
 
-    const { otp, id } = await sendOtpByPhone(phone, role)
+    const { otp, id } = await sendOtpByPhone(phone)
 
     return res.status(200).json({
       success: true,

@@ -11,6 +11,7 @@ authRouter.post('/verify-otp-by-phone', authController.verifyOtpByPhone)
 // by mail
 authRouter.post('/login-by-email', authController.loginByEmail)
 authRouter.post('/verify-otp-by-mail', authController.verifyOtpByEmail)
+authRouter.post('/resend-otp', authController.resendOtp)
 
 // profile
 authRouter.get('/me', checkAuth, authController.getMe)

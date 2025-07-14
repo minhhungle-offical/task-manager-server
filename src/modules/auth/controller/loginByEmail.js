@@ -23,7 +23,7 @@ export async function loginByEmail(req, res, next) {
       return res.status(404).json({ message: 'Employee not found' })
     }
 
-    const recentlySent = await hasRecentEmailOtp(email, 'employee')
+    const recentlySent = await hasRecentEmailOtp(email)
 
     if (recentlySent) {
       return res.status(429).json({
@@ -31,7 +31,7 @@ export async function loginByEmail(req, res, next) {
       })
     }
 
-    const { otp, id } = await sendOtpByEmail(email, 'employee')
+    const { otp, id } = await sendOtpByEmail(email)
 
     return res.status(200).json({
       success: true,
