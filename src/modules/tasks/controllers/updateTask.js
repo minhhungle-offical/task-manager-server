@@ -50,7 +50,7 @@ export async function updateTask(req, res) {
 
   if (assignedTo) {
     io.to(assignedTo).emit('task-assigned', {
-      type: 'task-updated',
+      type: 'task',
       userId: assignedTo,
       payload: updatedTask,
     })

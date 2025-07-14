@@ -45,7 +45,7 @@ export async function createTask(req, res) {
 
   if (assignedTo) {
     io.to(assignedTo).emit('task-assigned', {
-      type: 'task-assigned',
+      type: 'task',
       userId: assignedTo,
       payload: task,
     })
