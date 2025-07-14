@@ -7,11 +7,12 @@ const authRouter = express.Router()
 // by phone
 authRouter.post('/login-by-phone', authController.loginByPhone)
 authRouter.post('/verify-otp-by-phone', authController.verifyOtpByPhone)
+authRouter.post('/resend-otp-by-phone', authController.resendOtpByPhone)
 
 // by mail
 authRouter.post('/login-by-email', authController.loginByEmail)
-authRouter.post('/verify-otp-by-mail', authController.verifyOtpByEmail)
-authRouter.post('/resend-otp', authController.resendOtp)
+authRouter.post('/verify-otp-by-email', authController.verifyOtpByEmail)
+authRouter.post('/resend-otp-by-email', authController.resendOtpByEmail)
 
 // profile
 authRouter.get('/me', checkAuth, authController.getMe)

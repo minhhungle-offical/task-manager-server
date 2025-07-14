@@ -1,9 +1,9 @@
 import { v4 as uuid } from 'uuid'
 import { AccessCode } from '../../../config/db.collections.js'
-import { db } from '../../../config/db.js'
 import { generateOtp } from '../../../utils/generateCode.js'
 import { getOtpExpiry } from '../../../utils/optExpiry.js'
-import { sendSMS } from '../../../utils/sendSMS.js'
+// import { sendSMS } from '../../../utils/sendSMS.js'
+import { sendOtpEmail } from '../../../utils/sendOtpMail.js'
 
 const seconds = 30
 
@@ -23,7 +23,7 @@ export async function hasRecentPhoneOtp(phone) {
   })
 }
 
-export async function sendOtpByPhone(phone, role) {
+export async function sendOtpByPhone(phone) {
   const otp = generateOtp()
   const id = uuid()
 
@@ -32,7 +32,7 @@ export async function sendOtpByPhone(phone, role) {
     otp,
     isUsed: false,
     createdAt: new Date(),
-    role,
+    role: 'manager',
     type: 'sms',
   })
 
@@ -44,9 +44,7 @@ export async function sendOtpByPhone(phone, role) {
 // =================== EMAIL ===================
 
 export async function hasRecentEmailOtp(email) {
-  const snapshot = await db
-    .collection('accessCodes')
-    .where('email', '==', email)
+  const snapshot = await AccessCode.where('email', '==', email)
     .where('role', '==', 'employee')
     .where('type', '==', 'email')
     .where('isUsed', '==', false)
@@ -60,20 +58,19 @@ export async function hasRecentEmailOtp(email) {
   })
 }
 
-export async function sendOtpByEmail(email, role) {
+export async function sendOtpByEmail(email) {
   const otp = generateOtp()
   const id = uuid()
 
-  await db.collection('accessCodes').doc(id).set({
+  await AccessCode.doc(id).set({
     email,
     otp,
     isUsed: false,
     createdAt: new Date(),
-    role,
+    role: 'employee',
     type: 'email',
   })
-
-  // TODO: sendEmail(email, `Your OTP code is ${otp}`)
+  sendOtpEmail({ to: email, otpCode: otp })
 
   return { otp, id }
 }

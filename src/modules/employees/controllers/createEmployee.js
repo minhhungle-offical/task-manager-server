@@ -40,6 +40,7 @@ export async function createEmployee(req, res) {
 
     const newEmployee = {
       ...data,
+      id,
       role: 'employee',
       isActive: true,
       createdAt: Timestamp.now(),

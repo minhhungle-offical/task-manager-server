@@ -1,6 +1,7 @@
 import { config } from 'dotenv'
 import { db } from '../../../config/db.js'
 import { hasRecentEmailOtp, sendOtpByEmail } from '../service/opt.service.js'
+import { User } from '../../../config/db.collections.js'
 
 config()
 
@@ -12,9 +13,7 @@ export async function loginByEmail(req, res, next) {
       return res.status(400).json({ message: 'Email is required' })
     }
 
-    const userSnap = await db
-      .collection('users')
-      .where('email', '==', email)
+    const userSnap = await User.where('email', '==', email)
       .where('role', '==', 'employee')
       .limit(1)
       .get()
