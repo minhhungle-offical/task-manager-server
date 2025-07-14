@@ -2,6 +2,7 @@ import { v4 as uuid } from 'uuid'
 import { z } from 'zod'
 import { Timestamp } from 'firebase-admin/firestore'
 import { Task } from '../../../config/db.collections.js'
+import { sendWelcomeEmail } from '../../../utils/sendWelcomeEmail.js'
 
 const schema = z.object({
   title: z.string().min(1),
@@ -47,6 +48,16 @@ export async function createTask(req, res) {
       type: 'task-assigned',
       payload: task,
     })
+
+    const assignedUserSnap = await User.doc(assignedTo).get()
+    const assignedUser = assignedUserSnap.exists ? assignedUserSnap.data() : null
+
+    if (assignedUser?.email && assignedUser?.name) {
+      await sendWelcomeEmail({
+        to: assignedUser.email,
+        name: assignedUser.name,
+      })
+    }
   }
 
   res.status(201).json({

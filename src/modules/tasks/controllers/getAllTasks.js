@@ -1,3 +1,4 @@
+import { Timestamp } from 'firebase-admin/firestore'
 import { Task, User } from '../../../config/db.collections.js'
 
 export async function getAllTasks(req, res) {
@@ -44,6 +45,9 @@ export async function getAllTasks(req, res) {
         return {
           ...task,
           employeeName,
+          dueDate: task.dueDate ? task.dueDate.toDate().toISOString() : null,
+          createdAt: task.dueDate ? task.createdAt.toDate().toISOString() : null,
+          updatedAt: task.dueDate ? task.updatedAt.toDate().toISOString() : null,
         }
       }),
     )

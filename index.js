@@ -16,10 +16,6 @@ const io = new Server(server, {
 })
 app.set('io', io)
 
-io.on('connection', (socket) => {
-  console.log('Socket IO connected:', socket.id)
-})
-
 joinRoom(io)
 
 const PORT = process.env.PORT || 3000

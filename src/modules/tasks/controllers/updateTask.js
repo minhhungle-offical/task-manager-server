@@ -1,6 +1,7 @@
-import { z } from 'zod'
 import { Timestamp } from 'firebase-admin/firestore'
-import { Task } from '../../../config/db.collections.js'
+import { z } from 'zod'
+import { Task, User } from '../../../config/db.collections.js'
+import { sendTaskAssignedEmail } from '../../../utils/sendTaskAssignedEmail.js'
 
 const schema = z.object({
   title: z.string().min(1),
@@ -52,6 +53,18 @@ export async function updateTask(req, res) {
       type: 'task-updated',
       payload: updatedTask,
     })
+
+    const assignedUserSnap = await User.doc(assignedTo).get()
+    const assignedUser = assignedUserSnap.exists ? assignedUserSnap.data() : null
+
+    if (assignedUser?.email && assignedUser?.name) {
+      await sendTaskAssignedEmail({
+        to: assignedUser.email,
+        name: assignedUser.name,
+        dueDate: updatedTask.dueDate,
+        title: updatedTask.title,
+      })
+    }
   }
 
   res.status(200).json({
