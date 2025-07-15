@@ -21,8 +21,6 @@ export const createMessage = (io, socket) => {
         createdAt: Timestamp.now().toDate().toISOString(),
       }
 
-      console.log('[debug]', newMessage)
-
       await Message.doc(id).set(newMessage)
       const savedMessage = { ...newMessage }
 

@@ -7,10 +7,12 @@ export async function getMessages(req, res) {
   try {
     const snapshot = await Message.where('taskId', '==', taskId).get()
 
-    const messages = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }))
+    const messages = snapshot.docs
+      .map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }))
+      .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
 
     res.status(200).json({ data: messages, message: 'Get messages successfully', success: true })
   } catch (err) {
