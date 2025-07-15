@@ -5,6 +5,7 @@ import morgan from 'morgan'
 import authRouter from './modules/auth/auth.route.js'
 import employeeRouter from './modules/employees/employee.route.js'
 import taskRouter from './modules/tasks/task.route.js'
+import messageRouter from './modules/messages/message.route.js'
 
 const app = express()
 
@@ -29,6 +30,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/api/auth', authRouter)
 app.use('/api/employees', employeeRouter)
 app.use('/api/tasks', taskRouter)
+app.use('/api/messages', messageRouter)
 
 app.use((req, res, next) => {
   res.status(404).json({ error: 'Not Found' })
